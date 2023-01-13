@@ -19,6 +19,7 @@ body{
     width: 400px;
     padding: 20px;
     background-color: black;
+    border-radius: 10px;
 }
 
 .container > *{
@@ -27,7 +28,22 @@ body{
 
 .screen{
     height: 20%;
+    font-size: 25px;
+    overflow-y: hidden;
 }
+.screen>.input{
+    width: 100%;
+    overflow-wrap:break-word;
+    overflow-y: scroll;
+    text-align: right;
+
+    position: absolute;
+    bottom: 0;
+}
+.screen>.input::-webkit-scrollbar{
+    display: none;
+}
+
 
 .inbetween{
     height: 10%;
@@ -36,23 +52,49 @@ body{
     display: flex;
     justify-content: end;
 
-    border-top: 1px solid rgb(99, 99, 99);
     border-bottom: 1px solid rgb(99, 99, 99);
 }
 
 .keys{
     height: 70%;
+    padding-top: 10px;
+    
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, 20%);
+    justify-content: space-around;
+    align-items: center;
+}
+
+button{
+    aspect-ratio: 1;
+    border-radius: 100px;
+    
+}
+button:hover{
+    cursor: pointer;
+}
+.red-font{
+    color: red;
+}   
+.number{
+    color:orange
 }
 
 .keys>button{
-    aspect-ratio: 1;
-    border-radius: 100px;
+    font-size: 20px;
+    background-color:rgba(123, 123, 123, 0.25);
+}
+.keys>button:active{
+    font-size: 16px;
+}
+.keys>button:hover{
+    filter:brightness(120%);
 }
 
 .inbetween>button{
-    aspect-ratio: 1;
     height: 100%;
-    border-radius: 100px;
+    background-color: rgba(123, 123, 123, 0);
+}
+.inbetween>button:hover{
+    background-color: rgba(123, 123, 123, 0.25);
 }
