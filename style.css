@@ -28,11 +28,12 @@ body{
 
 .screen{
     height: 20%;
-    font-size: 25px;
+    font-size: 30px;
     overflow-y: hidden;
 }
 .screen>.input{
     width: 100%;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     overflow-wrap:break-word;
     overflow-y: scroll;
     text-align: right;
@@ -50,9 +51,12 @@ body{
     padding: 5px;
 
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
 
     border-bottom: 1px solid rgb(99, 99, 99);
+}
+.inbetween>button{
+    font-size: 20px;
 }
 
 .keys{
@@ -60,7 +64,7 @@ body{
     padding-top: 10px;
     
     display: grid;
-    grid-template-columns: repeat(4, 20%);
+    grid-template-columns: repeat(4, 24%);
     justify-content: space-around;
     align-items: center;
 }
@@ -68,7 +72,6 @@ body{
 button{
     aspect-ratio: 1;
     border-radius: 100px;
-    
 }
 button:hover{
     cursor: pointer;
@@ -78,6 +81,12 @@ button:hover{
 }   
 .number{
     color:orange
+}
+#clear{
+    background-color: red;
+    color: black;
+    font-weight: 900;
+    font-size: 20px;
 }
 
 .keys>button{
