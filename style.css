@@ -29,17 +29,22 @@ body{
 .screen{
     height: 20%;
     font-size: 30px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     overflow-y: hidden;
+}
+.screen>div{
+    position: absolute;
+    bottom: 0;
+}
+.screen>#placeholder{
+    right: 0;
 }
 .screen>.input{
     width: 100%;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    
     overflow-wrap:break-word;
     overflow-y: scroll;
     text-align: right;
-
-    position: absolute;
-    bottom: 0;
 }
 .screen>.input::-webkit-scrollbar{
     display: none;
@@ -72,6 +77,9 @@ body{
 button{
     aspect-ratio: 1;
     border-radius: 100px;
+}
+button:disabled{
+    border: none;
 }
 button:hover{
     cursor: pointer;

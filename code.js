@@ -7,40 +7,68 @@ const equalBtn = document.getElementById('equal');
 const clearBtn = document.getElementById('clear');
 const backspaceBtn = document.getElementById('backspace');
 const display = document.getElementById('display');
+const zeroPH = document.getElementById('placeholder');
 
-let firstOperand;
-let secondOperand;
-let currentOperator;
+let firstOperand= 0;
+let secondOperand = 0;
+let currentOperator = 'plus';
 let operatorSlice;
 let clearEnabled = true;
 
 
 numbers.forEach(num => {
     num.addEventListener('click', () => {
-        reset()
+        clearOnInput()
         inputKey(num);
+        checkPlaceHolder()
     })
 });
 
 operators.forEach(oprt => {
     oprt.addEventListener('click', () => {
-        deleteMultipleOprt()
-        clearEnabled = false;
+        clearOnInput()
+        if(checkForOprt()){
+            getSecondOperand();
+            showResult()
+        }
+        deleteMultipleOprt()        
         getOperatorSlice()
         getFirstOperand()
-        getCurrentOperator(oprt);
-        inputKey(oprt);
+        getCurrentOperator(oprt)
+        inputKey(oprt)
+        zecimalBtn.disabled = false;
     })
 });
 
 equalBtn.addEventListener('click', () => {
     getSecondOperand();
-    display.innerText = operate(firstOperand, secondOperand, currentOperator);
-    clearEnabled = true;
+    showResult()
+    zecimalBtn.disabled = true;
+    resetOperators()
 });
 
-clearBtn.onclick = clear;
-backspaceBtn.onclick = deleteOne;
+clearBtn.addEventListener('click', () => {
+    clear()
+    checkPlaceHolder()
+    zecimalBtn.disabled = false;
+    resetOperators()
+});
+
+backspaceBtn.addEventListener('click', () => {
+    deleteOne()
+    checkPlaceHolder()
+})
+
+zecimalBtn.addEventListener('click', () => {
+    addZero()
+    inputKey(zecimalBtn)
+    checkPlaceHolder()
+    zecimalBtn.disabled = true;
+}); 
+
+function showResult() {
+    display.innerText = operate(firstOperand, secondOperand, currentOperator);
+}
 
 function getFirstOperand() {
     firstOperand = display.innerText;
@@ -61,38 +89,74 @@ function inputKey(element) {
 
 function deleteMultipleOprt() {
     if(display.innerText[display.innerText.length - 1] === '+'
-        || display.innerText[display.innerText.length - 1] === '-'
-        || display.innerText[display.innerText.length - 1] === '÷'
-        || display.innerText[display.innerText.length - 1] === 'x'){
-            deleteOne()
-        }
+    || display.innerText[display.innerText.length - 1] === '-'
+    || display.innerText[display.innerText.length - 1] === '÷'
+    || display.innerText[display.innerText.length - 1] === 'x'){
+        deleteOne()
+    }
+}
+
+function addZero() {
+    if(display.innerText[display.innerText.length - 1] === '+'
+    || display.innerText[display.innerText.length - 1] === '-'
+    || display.innerText[display.innerText.length - 1] === '÷'
+    || display.innerText[display.innerText.length - 1] === 'x'
+    || display.innerText.length === 0){
+        display.innerText += '0';
+    }
 }
 
 function deleteOne() {
+    if(display.innerText[display.innerText.length - 1] === '.'){
+        zecimalBtn.disabled = false;Math.round((a / b) * 1000) / 1000;
+    }
     display.innerText = display.innerText.slice(0, display.innerText.length - 1);
 }
-function clear() {
-    display.innerText = '';
-}
-function reset() {
-    if(clearEnabled){
+function clearOnInput() {
+    if (clearEnabled) {
         clear()
         clearEnabled = false;
     }
 }
+function clear() {
+    display.innerText = '';
+}
 
+function checkPlaceHolder() {
+    display.innerText.length !== 0 ? zeroPH.innerText = '' : zeroPH.innerText = '0'
+}
+
+function resetOperators() {
+    firstOperand = 0;
+    secondOperand = 0;
+    currentOperator = 'plus';
+}
+
+function checkForOprt() {
+    let arr = display.innerText.split('');
+    for(i of arr){
+        if(i === '+'
+        || i === '-'
+        || i === 'x'
+        || i === '÷'){
+            return true;
+        }
+    }
+    return false
+}
 
 function operate(a, b, id) {
     a = +a;
     b = +b;
     if(id === 'plus'){
-        return a + b;
+        return Math.round((a = b) * 1000) / 1000;
     } else if(id === 'minus'){
-        return a - b;
+        return Math.round((a - b) * 1000) / 1000;
     } else if(id === 'multiply'){
-        return a * b;
+        return Math.round((a * b) * 1000) / 1000;
     } else if(id === 'divide'){
         if(b === 0){
+            clearEnabled = true;
             return `Can't divide by 0`;
         }
         return Math.round((a / b) * 1000) / 1000;
