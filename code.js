@@ -14,13 +14,15 @@ let secondOperand = 0;
 let currentOperator = 'plus';
 let operatorSlice;
 let clearEnabled = true;
+const operatorArr = ['+', '-', 'x', '÷'];
 
 
 numbers.forEach(num => {
     num.addEventListener('click', () => {
         clearOnInput()
-        inputKey(num);
+        inputKey(num)
         checkPlaceHolder()
+        enableOperators()
     })
 });
 
@@ -28,43 +30,50 @@ operators.forEach(oprt => {
     oprt.addEventListener('click', () => {
         clearOnInput()
         if(checkForOprt()){
-            getSecondOperand();
+            getSecondOperand()
             showResult()
         }
-        deleteMultipleOprt()        
+        deleteMultipleOprt()  
+
         getOperatorSlice()
         getFirstOperand()
         getCurrentOperator(oprt)
+
         inputKey(oprt)
         zecimalBtn.disabled = false;
     })
 });
 
 equalBtn.addEventListener('click', () => {
-    getSecondOperand();
+    getSecondOperand()
     showResult()
-    zecimalBtn.disabled = true;
     resetOperators()
+    checkDotAfterEqual()
+    enableOperators()
 });
-
-clearBtn.addEventListener('click', () => {
-    clear()
-    checkPlaceHolder()
-    zecimalBtn.disabled = false;
-    resetOperators()
-});
-
-backspaceBtn.addEventListener('click', () => {
-    deleteOne()
-    checkPlaceHolder()
-})
 
 zecimalBtn.addEventListener('click', () => {
     addZero()
     inputKey(zecimalBtn)
     checkPlaceHolder()
+    disableOperators()
     zecimalBtn.disabled = true;
 }); 
+
+clearBtn.addEventListener('click', () => {
+    clear()
+    checkPlaceHolder()
+    zecimalBtn.disabled = false;
+    disableOperators()
+    resetOperators()
+});
+
+backspaceBtn.addEventListener('click', () => {
+    clearOnInput()
+    deleteOne()
+    disableOperators()
+    checkPlaceHolder()
+})
 
 function showResult() {
     display.innerText = operate(firstOperand, secondOperand, currentOperator);
@@ -88,28 +97,24 @@ function inputKey(element) {
 }
 
 function deleteMultipleOprt() {
-    if(display.innerText[display.innerText.length - 1] === '+'
-    || display.innerText[display.innerText.length - 1] === '-'
-    || display.innerText[display.innerText.length - 1] === '÷'
-    || display.innerText[display.innerText.length - 1] === 'x'){
-        deleteOne()
+    for(tmp of operatorArr){
+        if(display.innerText[display.innerText.length - 1] === tmp){
+            deleteOne()
+        }
     }
 }
 
 function addZero() {
-    if(display.innerText[display.innerText.length - 1] === '+'
-    || display.innerText[display.innerText.length - 1] === '-'
-    || display.innerText[display.innerText.length - 1] === '÷'
-    || display.innerText[display.innerText.length - 1] === 'x'
-    || display.innerText.length === 0){
-        display.innerText += '0';
+    for(tmp of operatorArr){
+        if(display.innerText[display.innerText.length - 1] === tmp
+        || display.innerText.length === 0){
+            display.innerText += '0';
+        }
     }
 }
 
 function deleteOne() {
-    if(display.innerText[display.innerText.length - 1] === '.'){
-        zecimalBtn.disabled = false;Math.round((a / b) * 1000) / 1000;
-    }
+    checkIfLastIsDot()
     display.innerText = display.innerText.slice(0, display.innerText.length - 1);
 }
 function clearOnInput() {
@@ -124,6 +129,28 @@ function clear() {
 
 function checkPlaceHolder() {
     display.innerText.length !== 0 ? zeroPH.innerText = '' : zeroPH.innerText = '0'
+}
+
+function checkDotAfterEqual() {
+    for(i of display.innerText.split('')){
+        if(i === '.'){
+            zecimalBtn.disabled = true;
+        }
+    }
+}
+
+function disableOperators() {
+    for(oprt of operators){
+        if(display.innerText === ''){
+            oprt.disabled = true;  
+        }
+    }
+}
+
+function enableOperators() {
+    for(oprt of operators){
+        oprt.disabled = false;  
+    }
 }
 
 function resetOperators() {
@@ -145,11 +172,22 @@ function checkForOprt() {
     return false
 }
 
+function checkIfLastIsDot() {
+    if(display.innerText[display.innerText.length - 1] === '.'){
+        zecimalBtn.disabled = false;
+    }
+    for(tmp of operatorArr){
+        if(display.innerText[display.innerText.length - 1] === tmp){
+            zecimalBtn.disabled = true;
+        }
+    }             
+}
+
 function operate(a, b, id) {
     a = +a;
     b = +b;
     if(id === 'plus'){
-        return Math.round((a = b) * 1000) / 1000;
+        return Math.round((a + b) * 1000) / 1000;
     } else if(id === 'minus'){
         return Math.round((a - b) * 1000) / 1000;
     } else if(id === 'multiply'){
@@ -162,3 +200,7 @@ function operate(a, b, id) {
         return Math.round((a / b) * 1000) / 1000;
     }
 }
+
+window.addEventListener('load', () => {
+    disableOperators()
+})
