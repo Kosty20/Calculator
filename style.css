@@ -29,19 +29,20 @@ body{
 .screen{
     height: 20%;
     font-size: 30px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     overflow-y: hidden;
 }
 .screen>div{
     position: absolute;
-    bottom: 0;
+    right: 10px;
+    bottom: 30%;
 }
 .screen>#placeholder{
-    right: 0;
     color: grey;
 }
 .screen>.input{
-    width: 100%;
     
     overflow-wrap:break-word;
     overflow-y: scroll;
@@ -84,10 +85,12 @@ button{
 .red-font{
     color: red;
 }   
-.number{
+.number,
+.number-zero{
     color:orange
 }
 #clear{
+    aspect-ratio: 2;
     background-color: red;
     color: black;
     font-weight: 900;

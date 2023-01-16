@@ -1,7 +1,5 @@
 
 
-
-const allBtns = document.querySelectorAll('.button');
 const numbers = document.querySelectorAll('.number');
 const zeroBtn = document.querySelector('.number-zero');
 const operators = document.querySelectorAll('.operator');
@@ -24,20 +22,20 @@ const operatorArr = ['+', '-', 'x', '÷'];
 numbers.forEach(num => {
     num.addEventListener('click', () => {
         clearOnInput()
-
+        deleteZeroIfFirst()
         inputKey(num)
         checkPlaceHolder()
         enableOperators()
+        enableZero()
     })
 })
 
 zeroBtn.addEventListener('click', () => {
-    if(display.innerText.slice(-2) === '0'){
-        zeroBtn.disabled = true;
-    } else {zeroBtn.disabled = false;}
     clearOnInput()
+    inputZeroOnceIfFirst()
     inputKey(zeroBtn)
     checkPlaceHolder()
+    enableOperators()
 })
 
 operators.forEach(oprt => {
@@ -57,6 +55,7 @@ operators.forEach(oprt => {
         inputKey(oprt)
         zecimalBtn.disabled = false;
         clearEnabled = false;
+        enableZero()
     })
 })
 
@@ -68,6 +67,7 @@ equalBtn.addEventListener('click', () => {
         checkDotAfterEqual()
         enableOperators()
         clearEnabled = true;
+        enableZero()
     }
 })
 
@@ -78,6 +78,7 @@ zecimalBtn.addEventListener('click', () => {
     disableOperators()
     clearEnabled = false;
     zecimalBtn.disabled = true;
+    enableZero();
 })
 
 clearBtn.addEventListener('click', () => {
@@ -85,17 +86,41 @@ clearBtn.addEventListener('click', () => {
     checkPlaceHolder()
     disableOperators()
     resetOperators()
+    enableZero()
     zecimalBtn.disabled = false;
 })
 
 backspaceBtn.addEventListener('click', () => {
     clearOnInput()
+    enableZero()
     deleteOne()
     disableOperators()
     checkPlaceHolder()
 })
 
+function deleteZeroIfFirst() {
+    if(display.innerText[display.innerText.length - 1] === '0'){
+        for(tmp of operatorArr){
+            if(display.innerText[display.innerText.length - 2] === tmp
+            || display.innerText[display.innerText.length - 2] === undefined){
+                deleteOne()
+            }
+        }
+    }
+}
 
+function inputZeroOnceIfFirst() {
+    for(tmp of operatorArr){
+        if(display.innerText[display.innerText.length - 1] === tmp
+        || display.innerText[display.innerText.length - 1] === undefined){
+            zeroBtn.disabled = true;
+        }
+    }
+}
+
+function enableZero() {
+    zeroBtn.disabled = false;
+}
 
 function showResult() {
     display.innerText = operate(firstOperand, secondOperand, currentOperator);
@@ -135,15 +160,24 @@ function addZero() {
     }
 }
 
+function deleteFirstZero() {
+    
+}
+
 function deleteOne() {
     checkIfLastIsDot()
-    display.innerText = display.innerText.slice(0, display.innerText.length - 1);
+    display.innerText = display.innerText.slice(0, -1);
+    if(display.innerText.length === 0){// bug -> non-zecimal + operator + zecimal + backspace all = zecimal disabled
+        zecimalBtn.disabled = false;
+    }
 }
 
 function clearOnInput() {
     if (clearEnabled) {
         clear()
         clearEnabled = false;
+
+        zecimalBtn.disabled = false; // bugfix
     }
 }
 
@@ -181,6 +215,7 @@ function resetOperators() {
     firstOperand = 0;
     secondOperand = 0;
     currentOperator = 'plus';
+    operatorSlice = undefined;
 }
 
 function checkForOprt() {
@@ -198,10 +233,20 @@ function checkForOprt() {
 function checkIfLastIsDot() {
     if(display.innerText[display.innerText.length - 1] === '.'){
         zecimalBtn.disabled = false;
+        zeroBtn.disabled = true;
     }
-    for(tmp of operatorArr){
+    // if there's a dot in the input when deleting an operator, disable the dot
+    for(tmp of operatorArr){ 
         if(display.innerText[display.innerText.length - 1] === tmp){
-            zecimalBtn.disabled = true;
+            let dotFound = false;
+            for(i of display.innerText.split('')){
+                if(i === '.'){
+                    dotFound = true;
+                }
+            }
+            if(dotFound){
+                zecimalBtn.disabled = true;
+            }
         }
     }             
 }
