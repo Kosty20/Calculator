@@ -38,6 +38,7 @@ body{
 }
 .screen>#placeholder{
     right: 0;
+    color: grey;
 }
 .screen>.input{
     width: 100%;
@@ -77,11 +78,7 @@ body{
 button{
     aspect-ratio: 1;
     border-radius: 100px;
-}
-button:disabled{
     border: none;
-}
-button:hover{
     cursor: pointer;
 }
 .red-font{

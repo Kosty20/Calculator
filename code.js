@@ -1,6 +1,9 @@
 
 
+
+const allBtns = document.querySelectorAll('.button');
 const numbers = document.querySelectorAll('.number');
+const zero = document.querySelector('.number-zero');
 const operators = document.querySelectorAll('.operator');
 const zecimalBtn = document.getElementById('dot');
 const equalBtn = document.getElementById('equal');
@@ -17,56 +20,73 @@ let clearEnabled = true;
 const operatorArr = ['+', '-', 'x', '÷'];
 
 
+
 numbers.forEach(num => {
     num.addEventListener('click', () => {
         clearOnInput()
+
         inputKey(num)
         checkPlaceHolder()
         enableOperators()
     })
-});
+})
+
+zero.addEventListener('click', () => {
+    if(display.innerText.slice(-2) === '0'){
+        zero.disabled = true;
+    } else {zero.disabled = false;}
+    clearOnInput()
+    inputKey(zero)
+    checkPlaceHolder()
+})
 
 operators.forEach(oprt => {
     oprt.addEventListener('click', () => {
-        clearOnInput()
+
+        deleteMultipleOprt()
+
         if(checkForOprt()){
             getSecondOperand()
             showResult()
         }
-        deleteMultipleOprt()  
-
+          
         getOperatorSlice()
         getFirstOperand()
         getCurrentOperator(oprt)
 
         inputKey(oprt)
         zecimalBtn.disabled = false;
+        clearEnabled = false;
     })
-});
+})
 
 equalBtn.addEventListener('click', () => {
-    getSecondOperand()
-    showResult()
-    resetOperators()
-    checkDotAfterEqual()
-    enableOperators()
-});
+    if(display.innerText.length > operatorSlice){ //disables the equal btn if there's no second operand
+        getSecondOperand()
+        showResult()
+        resetOperators()
+        checkDotAfterEqual()
+        enableOperators()
+        clearEnabled = true;
+    }
+})
 
 zecimalBtn.addEventListener('click', () => {
     addZero()
     inputKey(zecimalBtn)
     checkPlaceHolder()
     disableOperators()
+    clearEnabled = false;
     zecimalBtn.disabled = true;
-}); 
+})
 
 clearBtn.addEventListener('click', () => {
     clear()
     checkPlaceHolder()
-    zecimalBtn.disabled = false;
     disableOperators()
     resetOperators()
-});
+    zecimalBtn.disabled = false;
+})
 
 backspaceBtn.addEventListener('click', () => {
     clearOnInput()
@@ -74,6 +94,8 @@ backspaceBtn.addEventListener('click', () => {
     disableOperators()
     checkPlaceHolder()
 })
+
+
 
 function showResult() {
     display.innerText = operate(firstOperand, secondOperand, currentOperator);
@@ -117,12 +139,14 @@ function deleteOne() {
     checkIfLastIsDot()
     display.innerText = display.innerText.slice(0, display.innerText.length - 1);
 }
+
 function clearOnInput() {
     if (clearEnabled) {
         clear()
         clearEnabled = false;
     }
 }
+
 function clear() {
     display.innerText = '';
 }
@@ -162,11 +186,10 @@ function resetOperators() {
 function checkForOprt() {
     let arr = display.innerText.split('');
     for(i of arr){
-        if(i === '+'
-        || i === '-'
-        || i === 'x'
-        || i === '÷'){
-            return true;
+        for(tmp of operatorArr){
+            if(i === tmp){
+                return true;
+            }
         }
     }
     return false
