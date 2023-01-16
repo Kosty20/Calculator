@@ -3,7 +3,7 @@
 
 const allBtns = document.querySelectorAll('.button');
 const numbers = document.querySelectorAll('.number');
-const zero = document.querySelector('.number-zero');
+const zeroBtn = document.querySelector('.number-zero');
 const operators = document.querySelectorAll('.operator');
 const zecimalBtn = document.getElementById('dot');
 const equalBtn = document.getElementById('equal');
@@ -31,12 +31,12 @@ numbers.forEach(num => {
     })
 })
 
-zero.addEventListener('click', () => {
+zeroBtn.addEventListener('click', () => {
     if(display.innerText.slice(-2) === '0'){
-        zero.disabled = true;
-    } else {zero.disabled = false;}
+        zeroBtn.disabled = true;
+    } else {zeroBtn.disabled = false;}
     clearOnInput()
-    inputKey(zero)
+    inputKey(zeroBtn)
     checkPlaceHolder()
 })
 
