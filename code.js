@@ -53,21 +53,23 @@ operators.forEach(oprt => {
         getCurrentOperator(oprt)
 
         inputKey(oprt)
+        enableZero()
         zecimalBtn.disabled = false;
         clearEnabled = false;
-        enableZero()
     })
 })
 
 equalBtn.addEventListener('click', () => {
     if(display.innerText.length > operatorSlice){ //disables the equal btn if there's no second operand
+        
         getSecondOperand()
         showResult()
-        resetOperators()
+        
         checkDotAfterEqual()
+        resetOperators()
         enableOperators()
-        clearEnabled = true;
         enableZero()
+        clearEnabled = true;
     }
 })
 
@@ -76,9 +78,9 @@ zecimalBtn.addEventListener('click', () => {
     inputKey(zecimalBtn)
     checkPlaceHolder()
     disableOperators()
+    enableZero()
     clearEnabled = false;
     zecimalBtn.disabled = true;
-    enableZero();
 })
 
 clearBtn.addEventListener('click', () => {
@@ -126,6 +128,24 @@ function showResult() {
     display.innerText = operate(firstOperand, secondOperand, currentOperator);
 }
 
+function operate(a, b, id) {
+    a = +a;
+    b = +b;
+    if(id === 'plus'){
+        return Math.round((a + b) * 1000) / 1000;
+    } else if(id === 'minus'){
+        return Math.round((a - b) * 1000) / 1000;
+    } else if(id === 'multiply'){
+        return Math.round((a * b) * 1000) / 1000;
+    } else if(id === 'divide'){
+        if(b === 0){
+            clearEnabled = true;
+            return `Can't divide by 0`; // Rounded each operator individualy so it can display this message
+        }
+        return Math.round((a / b) * 1000) / 1000;
+    }
+}
+
 function getFirstOperand() {
     firstOperand = display.innerText;
 }
@@ -160,14 +180,11 @@ function addZero() {
     }
 }
 
-function deleteFirstZero() {
-    
-}
-
 function deleteOne() {
     checkIfLastIsDot()
     display.innerText = display.innerText.slice(0, -1);
-    if(display.innerText.length === 0){// bug -> non-zecimal + operator + zecimal + backspace all = zecimal disabled
+
+    if(display.innerText.length === 0){// bugfix
         zecimalBtn.disabled = false;
     }
 }
@@ -235,7 +252,8 @@ function checkIfLastIsDot() {
         zecimalBtn.disabled = false;
         zeroBtn.disabled = true;
     }
-    // if there's a dot in the input when deleting an operator, disable the dot
+
+    // bugfix // if there's a dot in the input when deleting an operator, disable the dot
     for(tmp of operatorArr){ 
         if(display.innerText[display.innerText.length - 1] === tmp){
             let dotFound = false;
@@ -249,24 +267,6 @@ function checkIfLastIsDot() {
             }
         }
     }             
-}
-
-function operate(a, b, id) {
-    a = +a;
-    b = +b;
-    if(id === 'plus'){
-        return Math.round((a + b) * 1000) / 1000;
-    } else if(id === 'minus'){
-        return Math.round((a - b) * 1000) / 1000;
-    } else if(id === 'multiply'){
-        return Math.round((a * b) * 1000) / 1000;
-    } else if(id === 'divide'){
-        if(b === 0){
-            clearEnabled = true;
-            return `Can't divide by 0`;
-        }
-        return Math.round((a / b) * 1000) / 1000;
-    }
 }
 
 window.addEventListener('load', () => {

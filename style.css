@@ -4,10 +4,11 @@
     box-sizing: border-box;
     position: relative;
     color: white;
+    user-select: none;
 }
 
 body{
-    background-color:midnightblue;
+    background-color:peru;
     height: 100vh;
     display: flex;
     align-items: center;
@@ -15,9 +16,10 @@ body{
 }
 
 .container{
-    height: 600px;
+    aspect-ratio: 4/6;
     width: 400px;
     padding: 20px;
+    margin: 20px;
     background-color: black;
     border-radius: 10px;
 }
@@ -62,9 +64,6 @@ body{
 
     border-bottom: 1px solid rgb(99, 99, 99);
 }
-.inbetween>button{
-    font-size: 20px;
-}
 
 .keys{
     height: 70%;
@@ -79,6 +78,7 @@ body{
 button{
     aspect-ratio: 1;
     border-radius: 100px;
+    font-size: 20px;
     border: none;
     cursor: pointer;
 }
@@ -89,16 +89,14 @@ button{
 .number-zero{
     color:orange
 }
+
 #clear{
     aspect-ratio: 2;
-    background-color: red;
-    color: black;
     font-weight: 900;
-    font-size: 20px;
+    font-size: 25px;
 }
 
 .keys>button{
-    font-size: 20px;
     background-color:rgba(123, 123, 123, 0.25);
 }
 .keys>button:active{
@@ -114,4 +112,57 @@ button{
 }
 .inbetween>button:hover{
     background-color: rgba(123, 123, 123, 0.25);
+}
+
+footer{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 10px 0;
+    background-color:darkred;
+
+    text-align: center;
+    font-weight: 900;
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: black;
+}
+footer a{
+    text-decoration: none;
+    color: black;
+}
+footer a:hover{
+    text-decoration: underline;
+}
+
+@media (max-width : 400px) {
+    .screen{
+        font-size: 7.5vw;
+    }
+    #clear{
+        font-size: 6vw;
+    }
+    button,
+    footer{
+        font-size: 5vw;
+    }
+}
+@media (min-aspect-ratio: 3/5) and (max-height: 750px){
+    .container{
+        height: 80%;
+        width: fit-content;
+    }
+    .screen{
+        font-size: 4vh;
+    }
+    #clear{
+        font-size: 3vh;
+    }
+    button,
+    footer{
+        font-size: 3vh;
+    }
+    footer{
+        padding: 1vh;
+    }
 }
